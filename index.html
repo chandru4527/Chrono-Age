@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Document</title>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-blue-100 to-blue-300 flex items-center justify-center">
+
+    <div class="backdrop-blur-lg bg-white/70 shadow-2xl border border-white/40 
+                p-6 rounded-2xl w-[300px] text-center transition duration-300 hover:scale-105">
+
+        <h1 class="text-2xl font-bold text-blue-700 mb-4">
+            🎂 Age Calculator
+        </h1>
+
+        <div class="mb-4 text-left">
+            <label for="dob-date" class="block mb-2 text-sm font-semibold text-blue-600">
+                Your Date of Birth
+            </label>
+
+            <input type="date" id="dob-date"
+                class="w-full px-4 py-2 border border-blue-300 rounded-xl
+                       focus:ring-2 focus:ring-blue-500 focus:outline-none
+                       transition duration-200 shadow-sm bg-white cursor-pointer" />
+        </div>
+
+        <div class="border border-blue-300 p-4 rounded-xl mb-4 text-left
+                     text-sm font-medium text-gray-700 bg-white shadow-inner" id="result">
+
+            <p>Years : <span id="years" class="font-bold text-blue-600">0</span></p>
+            <p>Months : <span id="months" class="font-bold text-blue-600">0</span></p>
+            <p>Weeks : <span id="weeks" class="font-bold text-blue-600">0</span></p>
+            <p>Days : <span id="days" class="font-bold text-blue-600">0</span></p>
+            <p>Hours : <span id="hours" class="font-bold text-blue-600">0</span></p>
+            <p>Minutes : <span id="minutes" class="font-bold text-blue-600">0</span></p>
+        </div>
+
+        <button onclick="get()"
+            class="w-full py-2 rounded-xl font-semibold text-white 
+                   bg-blue-600 hover:bg-blue-700 active:scale-95 
+                   transition duration-200 shadow-lg cursor-pointer">
+            Calculate
+        </button>
+
+    </div>
+
+
+
+    <script>
+        const get = () => {
+
+            const dob_value = document.getElementById("dob-date").value;
+
+            if (!dob_value) {
+                alert("Enter the date of birth");
+                return;
+            }
+            const dob = new Date(dob_value);
+            const today = new Date();
+
+            dob.setHours(0, 0, 0, 0)
+            today.setHours(0, 0, 0, 0)
+
+            let years = today.getFullYear() - dob.getFullYear()
+            let months = today.getMonth() - dob.getMonth()
+            let rdays = today.getDate() - dob.getDate()
+
+            if (rdays < 0) {
+                months--;
+                const lastmonth = new Date(today.getFullYear(), today.getMonth(), 0);
+                rdays += lastmonth.getDate()
+            }
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+
+            const diff = today - dob
+
+            const totaldays = Math.floor(diff / (1000 * 60 * 60 * 24))
+
+            const totalweeks = Math.floor(totaldays / 7);
+            const wrdays = totaldays % 7
+            const totalmonths = Math.floor(totaldays / 30.44)
+
+            const mrday = Math.floor(totaldays % 30.44)
+            const totalhours = Math.floor(diff / (1000 * 60 * 60))
+            const totalmins = Math.floor(diff / (1000 * 60))
+            const totalsec = Math.floor(diff / (1000))
+
+
+            // Update UI
+            document.getElementById("result").innerHTML = `
+            <p>Years : <span class="font-bold text-xs text-blue-600">${years} years ${months} months ${rdays} days</span></p>
+            <p>Months : <span class="font-bold text-xs text-blue-600">${totalmonths} months ${rdays} days</span></p>
+            <p>Weeks : <span class="font-bold text-xs text-blue-600">${totalweeks} weeks ${wrdays} days</span></p>
+            <p>Days : <span class="font-bold text-xs text-blue-600">${totaldays} days</span></p>
+            <p>Hours : <span class="font-bold text-xs text-blue-600">${totalhours} hours</span></p>
+            <p>Minutes : <span class="font-bold text-xs text-blue-600">${totalmins} minutes</span></p>
+            <p>Seconds : <span class="font-bold text-xs text-blue-600">${totalsec} seconds</span></p>
+            `;
+        }
+    </script>
+</body>
+
+</html>
